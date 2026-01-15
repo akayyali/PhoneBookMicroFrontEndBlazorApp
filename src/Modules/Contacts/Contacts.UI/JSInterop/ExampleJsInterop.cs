@@ -35,8 +35,19 @@ namespace Contacts.UI.JSInterop
         {
             if (moduleTask.IsValueCreated)
             {
-                var module = await moduleTask.Value;
-                await module.DisposeAsync();
+                try
+                {
+                    var module = await moduleTask.Value;
+                    await module.DisposeAsync();
+                }
+                catch (JSDisconnectedException)
+                {
+                    // Circuit disconnected - nothing to do
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Runtime already disposed - ignore
+                }
             }
         }
     }
