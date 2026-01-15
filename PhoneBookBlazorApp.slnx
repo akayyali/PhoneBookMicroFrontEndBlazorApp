@@ -17,5 +17,8 @@
     <Project Path="src/Modules/Contacts/Contacts.Domain/Contacts.Domain.csproj" Id="8fe1ca8c-6c24-4d39-91da-f47e39c7ab7d" />
     <Project Path="src/Modules/Contacts/Contacts.Infrastructure/Contacts.Infrastructure.csproj" Id="308de083-f14f-4dba-890e-a33a12361f05" />
   </Folder>
-  <Folder Name="/src/Shared/" />
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/PhoneBook.Kernel.Infrastructure/PhoneBook.Kernel.Infrastructure.csproj" Id="24f2e732-5dbb-43eb-9893-70ed1b3b0885" />
+    <Project Path="src/Shared/PhoneBook.Kernel/PhoneBook.Kernel.csproj" Id="c9eba164-2dcb-497f-9fb8-de371a2a3242" />
+  </Folder>
 </Solution>
