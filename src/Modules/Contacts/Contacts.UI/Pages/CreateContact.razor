@@ -32,10 +32,8 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4 p-md-5">
                     <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+                        
                         <DataAnnotationsValidator />
-
-                        @* <InputText @bind-Value="model.FirstName" placeholder="Enter dummy name" /> *@
-
                         @* Section 1: Basic Information *@
                         <div class="mb-4">
                             <h5 class="text-primary mb-3 border-bottom pb-2">Personal Information</h5>
@@ -134,7 +132,7 @@
                         @* Form Actions *@
                         <div class="d-flex justify-content-end gap-2 border-top pt-4">
                             <button class="btn btn-light px-4" type="button" @onclick="Cancel">Cancel</button>
-                            <button class="btn btn-primary px-5 shadow-sm" @onclick="() => HandleValidSubmit()" type="submit" disabled="@isSubmitting">
+                            <button class="btn btn-primary px-5 shadow-sm" type="submit" disabled="@isSubmitting">
                                 @if (isSubmitting)
                                 {
                                     <span class="spinner-border spinner-border-sm me-2" role="status"></span>
@@ -197,14 +195,6 @@
         }
         finally { isSubmitting = false; }
     }
-
-
-    // private Task OnValueChanged(string value)
-    // {
-    //     // Assign the selected value to the Model 
-    //     model.ContactGroupIdString= value;
-    //     return Task.CompletedTask;
-    // } 
 
 
     private void NavigateBack() => Navigation.NavigateTo("/contacts");
