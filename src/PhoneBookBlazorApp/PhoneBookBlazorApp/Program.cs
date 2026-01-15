@@ -1,5 +1,7 @@
 using PhoneBookBlazorApp.Client.Pages;
 using PhoneBookBlazorApp.Components;
+using Contacts.UI;
+using Contacts.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddContactsApplicationServices(builder.Configuration);
+builder.Services.AddContactsUIServices(builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -30,6 +36,6 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(PhoneBookBlazorApp.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(PhoneBookBlazorApp.Client._Imports).Assembly, typeof(Contacts.UI.Pages.Contacts).Assembly);
 
 app.Run();

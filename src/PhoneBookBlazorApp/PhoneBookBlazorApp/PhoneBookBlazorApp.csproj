@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Contacts\Contacts.Application\Contacts.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Contacts\Contacts.UI\Contacts.UI.csproj" />
     <ProjectReference Include="..\PhoneBookBlazorApp.Client\PhoneBookBlazorApp.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.2" />
   </ItemGroup>

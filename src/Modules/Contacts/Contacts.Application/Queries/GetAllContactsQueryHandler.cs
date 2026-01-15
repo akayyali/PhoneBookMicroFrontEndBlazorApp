@@ -1,6 +1,7 @@
 ﻿using Contacts.Contracts.DTOs;
 using Contacts.Infrastructure;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +21,7 @@ namespace Contacts.Application.Queries
         {
             var contacts = _contactsDBContext.Contacts.Select(x => new ContactDto()
             {
+                Id = x.Id,
                 Company = x.Company,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
@@ -41,7 +43,7 @@ namespace Contacts.Application.Queries
                     PostCode = x.Address.PostCode,
                     Country = x.Address.Country
                 } : null,
-            });
+            }).AsNoTracking();
 
             return contacts;
         }
