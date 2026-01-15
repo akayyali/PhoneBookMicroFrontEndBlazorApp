@@ -1,0 +1,239 @@
+﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@page "/contacts/create"
+@rendermode InteractiveServer
+
+@using MediatR
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using global::Contacts.Application.Commands
+@using global::Contacts.Application.Queries
+@using global::Contacts.Contracts.DTOs
+@using global::Contacts.UI.JSInterop
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@inject ExampleJsInterop jsInterop
+
+<PageTitle>Create Contact</PageTitle>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            @* Header Section *@
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0">Create Contact</h2>
+                    <p class="text-muted">Add a new person to your contact list.</p>
+                </div>
+                <button class="btn btn-outline-secondary shadow-sm" @onclick="NavigateBack">
+                    <i class="bi bi-arrow-left me-1"></i> Back to List
+                </button>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+
+                        @* <InputText @bind-Value="model.FirstName" placeholder="Enter dummy name" /> *@
+
+                        @* Section 1: Basic Information *@
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3 border-bottom pb-2">Personal Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
+                                    <InputText class="form-control" @bind-Value="model.FirstName" placeholder="John" />
+                                    <ValidationMessage For="@(() => model.FirstName)" class="text-danger small" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
+                                    <InputText class="form-control" @bind-Value="model.LastName" placeholder="Doe" />
+                                    <ValidationMessage For="@(() => model.LastName)" class="text-danger small" />
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label fw-semibold">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                        <InputText class="form-control" @bind-Value="model.Email" placeholder="email@example.com" />
+                                    </div>
+                                    <ValidationMessage For="@(() => model.Email)" class="text-danger small" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold">Code</label>
+                                    <InputText class="form-control" @bind-Value="model.CountryCode" placeholder="+1" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold">Phone <span class="text-danger">*</span></label>
+                                    <InputText class="form-control" @bind-Value="model.PhoneNumber" />
+                                    <ValidationMessage For="@(() => model.PhoneNumber)" class="text-danger small" />
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Section 2: Professional Details *@
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3 border-bottom pb-2">Professional</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Company</label>
+                                    <InputText class="form-control" @bind-Value="model.Company" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Job Title</label>
+                                    <InputText class="form-control" @bind-Value="model.JobTitle" />
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Contact Group</label>
+                                    <InputSelect class="form-select" @bind-Value="model.ContactGroupIdString" @ValueChanged="(string value) => OnValueChanged(value )">
+                                        <option value="">-- No Group assigned --</option>
+                                        @if (contactGroups != null)
+                                        {
+                                            @foreach (var g in contactGroups)
+                                            {
+                                                <option value="@g.Id">@g.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Section 3: Address *@
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3 border-bottom pb-2">Address (Optional)</h5>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Street Address</label>
+                                    <InputText class="form-control" @bind-Value="model.Street" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">City</label>
+                                    <InputText class="form-control" @bind-Value="model.City" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">State / Province</label>
+                                    <InputText class="form-control" @bind-Value="model.State" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Postal Code</label>
+                                    <InputText class="form-control" @bind-Value="model.PostalCode" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Country</label>
+                                    <InputText class="form-control" @bind-Value="model.Country" />
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Section 4: Extra *@
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Internal Notes</label>
+                            <InputTextArea class="form-control" @bind-Value="model.Notes" Rows="3" placeholder="Add any relevant details about this contact..." />
+                        </div>
+
+                        @* Form Actions *@
+                        <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                            <button class="btn btn-light px-4" type="button" @onclick="Cancel">Cancel</button>
+                            <button class="btn btn-primary px-5 shadow-sm" @onclick="() => HandleValidSubmit()" type="submit" disabled="@isSubmitting">
+                                @if (isSubmitting)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    <span>Saving...</span>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-plus-fill me-2"></i>
+                                    <span>Create Contact</span>
+                                }
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Logic remains identical to your original code
+    private CreateContactModel model = new();
+    private bool isSubmitting = false;
+    private List<ContactGroupDto> contactGroups = new();
+
+    protected override async Task OnInitializedAsync() => await LoadContactGroups();
+
+    private async Task LoadContactGroups()
+    {
+        try
+        {
+            var groups = await Mediator.Send(new GetAllContactGroupsQuery());
+            contactGroups = groups?.ToList() ?? new List<ContactGroupDto>();
+        }
+        catch { contactGroups = new List<ContactGroupDto>(); }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isSubmitting = true;
+        try
+        {
+            Guid? groupId = Guid.TryParse(model.ContactGroupIdString, out var parsed) ? parsed : null;
+            var command = new CreateContactCommand(
+                model.FirstName, model.LastName, model.PhoneNumber, model.CountryCode,
+                model.Email, model.Street, model.City, model.State, model.PostalCode,
+                model.Country, model.Company, model.JobTitle, model.Notes, groupId);
+
+            var coontactDto = await Mediator.Send(command);
+            if (coontactDto!= null)
+            {
+                await jsInterop.AlertUser("Contact created successfully.");
+                Navigation.NavigateTo("/contacts");
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            await jsInterop.AlertUser($"Error: {ex.Message}");
+        }
+        finally { isSubmitting = false; }
+    }
+
+
+    // private Task OnValueChanged(string value)
+    // {
+    //     // Assign the selected value to the Model 
+    //     model.ContactGroupIdString= value;
+    //     return Task.CompletedTask;
+    // } 
+
+
+    private void NavigateBack() => Navigation.NavigateTo("/contacts");
+    private void Cancel() => Navigation.NavigateTo("/contacts");
+
+    public class CreateContactModel
+    {
+        [Required(ErrorMessage = "First name is required")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Last name is required")]
+        public string LastName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Phone number is required")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        public string? CountryCode { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string? Email { get; set; }
+
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Country { get; set; }
+        public string? Company { get; set; }
+        public string? JobTitle { get; set; }
+        public string? Notes { get; set; }
+        public string? ContactGroupIdString { get; set; } = "";
+    }
+}

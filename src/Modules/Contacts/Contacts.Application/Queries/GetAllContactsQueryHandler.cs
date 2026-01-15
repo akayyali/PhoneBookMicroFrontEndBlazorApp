@@ -8,15 +8,8 @@ using System.Text;
 
 namespace Contacts.Application.Queries
 {
-    public class GetAllContactsQueryHandler : IRequestHandler<GetAllContactsQuery, IEnumerable<ContactDto>>
+    public class GetAllContactsQueryHandler(ContactsDbContext _contactsDBContext) : IRequestHandler<GetAllContactsQuery, IEnumerable<ContactDto>>
     {
-        private readonly ContactsDbContext _contactsDBContext;
-
-        public GetAllContactsQueryHandler(ContactsDbContext dbContext)
-        {
-            _contactsDBContext = dbContext;
-        }
-
         public async Task<IEnumerable<ContactDto>> Handle(GetAllContactsQuery request, CancellationToken cancellationToken)
         {
             var contacts = _contactsDBContext.Contacts.Select(x => new ContactDto()
