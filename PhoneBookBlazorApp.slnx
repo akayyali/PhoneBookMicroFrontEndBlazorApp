@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/src/">
+    <Project Path="src/PhoneBookBlazorApp/PhoneBookBlazorApp.Client/PhoneBookBlazorApp.Client.csproj" />
+    <Project Path="src/PhoneBookBlazorApp/PhoneBookBlazorApp/PhoneBookBlazorApp.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Calls/">
+    <Project Path="src/Modules/Calls/Calls.Application/Calls.Application.csproj" Id="8694edd3-26ad-403d-8a58-6805287de9a6" />
+    <Project Path="src/Modules/Calls/Calls.Contracts/Calls.Contracts.csproj" Id="b2af41a4-2e02-4692-bc71-dc3c4d7f5586" />
+    <Project Path="src/Modules/Calls/Calls.Domain/Calls.Domain.csproj" Id="e2ee8fca-a854-4fd8-a70d-fb4d9d62456f" />
+    <Project Path="src/Modules/Calls/Calls.Infrastructure/Calls.Infrastructure.csproj" Id="aac55be9-72fd-4958-b4bc-76310a08d9f9" />
+  </Folder>
+  <Folder Name="/src/Modules/Contacts/">
+    <Project Path="src/Modules/Contacts/Contacts.Application/Contacts.Application.csproj" Id="574adf7b-5442-4b54-947f-d4371fa6bab7" />
+    <Project Path="src/Modules/Contacts/Contacts.Contracts/Contacts.Contracts.csproj" Id="486bb277-b770-4436-bef8-f5f3b2dd14a8" />
+    <Project Path="src/Modules/Contacts/Contacts.Domain/Contacts.Domain.csproj" Id="8fe1ca8c-6c24-4d39-91da-f47e39c7ab7d" />
+    <Project Path="src/Modules/Contacts/Contacts.Infrastructure/Contacts.Infrastructure.csproj" Id="308de083-f14f-4dba-890e-a33a12361f05" />
+  </Folder>
+  <Folder Name="/src/Shared/" />
+</Solution>
