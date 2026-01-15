@@ -1,4 +1,5 @@
 ﻿using Contacts.Infrastructure;
+using Contacts.UI.JSInterop;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

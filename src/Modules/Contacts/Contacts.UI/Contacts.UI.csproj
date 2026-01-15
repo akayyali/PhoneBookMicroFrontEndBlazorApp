@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="JS\Example.js" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -16,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="JS\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
