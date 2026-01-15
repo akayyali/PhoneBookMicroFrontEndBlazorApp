@@ -13,6 +13,7 @@ namespace Contacts.Infrastructure.Configurations
         {
             builder.ToTable("Contacts");
             builder.HasKey(c => c.Id);
+            builder.Property(c=>c.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(c => c.FirstName).IsRequired().HasMaxLength(100);
             builder.Property(c => c.LastName).IsRequired().HasMaxLength(100);

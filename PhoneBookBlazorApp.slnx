@@ -1,5 +1,10 @@
 <Solution>
-  <Folder Name="/Solution Items/" />
+  <Folder Name="/Database/">
+    <File Path="Database/PhonebookDb.sql" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/PhoneBookBlazorApp/PhoneBookBlazorApp.Client/PhoneBookBlazorApp.Client.csproj" />
     <Project Path="src/PhoneBookBlazorApp/PhoneBookBlazorApp/PhoneBookBlazorApp.csproj" />

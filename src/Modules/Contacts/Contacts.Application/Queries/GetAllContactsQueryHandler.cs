@@ -45,7 +45,7 @@ namespace Contacts.Application.Queries
                 } : null,
             }).AsNoTracking();
 
-            return contacts;
+            return await contacts.ToListAsync();
         }
     }
 
