@@ -1,0 +1,45 @@
+﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
+
+@page "/stats"
+@rendermode InteractiveServer
+
+@using MediatR
+@using Microsoft.JSInterop
+@using PhoneBook.Kernel
+@using PhoneBook.Kernel.Data.Specification
+@using global::Contacts.Application.Commands
+@using global::Contacts.Application.Queries
+@using global::Contacts.Contracts.DTOs
+@using global::Contacts.Domain
+@using global::Contacts.Domain.Specifications
+@using global::Contacts.UI.JSInterop
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject ExampleJsInterop jsInterop
+
+
+<PageTitle>Contacts Statistics</PageTitle>
+
+<div class="container-fluid py-4">
+
+</div>
+
+@code {
+    private List<ContactDto>? contacts;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadContacts();
+    }
+
+    private async Task LoadContacts()
+    {
+        isLoading = true;
+        var query = new GetContactsQuery(new GetContactsSpecification() { TrackingOptions = enumTrackingOptions.DoNotTrack });
+        contacts = (await Mediator.Send(query)).ToList();
+        isLoading = false;
+    }
+
+}
