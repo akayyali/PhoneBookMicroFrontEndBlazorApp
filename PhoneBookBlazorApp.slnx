@@ -16,6 +16,7 @@
     <Project Path="src/Modules/Calls/Calls.Contracts/Calls.Contracts.csproj" Id="b2af41a4-2e02-4692-bc71-dc3c4d7f5586" />
     <Project Path="src/Modules/Calls/Calls.Domain/Calls.Domain.csproj" Id="e2ee8fca-a854-4fd8-a70d-fb4d9d62456f" />
     <Project Path="src/Modules/Calls/Calls.Infrastructure/Calls.Infrastructure.csproj" Id="aac55be9-72fd-4958-b4bc-76310a08d9f9" />
+    <Project Path="src/Modules/Calls/Calls.UI/Calls.UI.csproj" Id="c0ee3f32-281e-425f-898d-2ae87379fcd5" />
   </Folder>
   <Folder Name="/src/Modules/Contacts/">
     <Project Path="src/Modules/Contacts/Contacts.Application/Contacts.Application.csproj" Id="574adf7b-5442-4b54-947f-d4371fa6bab7" />

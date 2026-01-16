@@ -1,12 +1,10 @@
-﻿using Contacts.Infrastructure;
-using Contacts.UI.JSInterop;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Contacts.UI
+namespace Calls.UI
 {
     public static class Initializer
     {
@@ -16,10 +14,7 @@ namespace Contacts.UI
 
         public static IServiceCollection AddContactsUIServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ExampleJsInterop>();
-
             return services;
-
         }
 
 

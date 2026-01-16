@@ -1,0 +1,85 @@
+﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
+
+@page "/dialer"
+@rendermode InteractiveServer
+
+<div class="dialer-wrapper">
+    <div class="dialer-horizontal">
+
+        <div class="keypad-section">
+            <div class="keypad-grid">
+                @foreach (var key in _keys)
+                {
+                    <button class="dial-btn" @onclick="() => AppendDigit(key)">
+                        @key
+                    </button>
+                }
+                <button class="dial-btn util" @onclick="ClearAll">C</button>
+                <button class="dial-btn util" @onclick="Backspace">⌫</button>
+            </div>
+        </div>
+
+        <div class="display-section">
+            <div class="screen-box">
+                <label>Destination</label>
+                <div class="number-display">@(_currentNumber == "" ? "Enter Number..." : _currentNumber)</div>
+            </div>
+
+            <div class="action-row">
+                <button class="action-btn call" @onclick="StartCall" disabled="@(string.IsNullOrEmpty(_currentNumber))">
+                    <span class="icon">📞</span> Start Call
+                </button>
+                <button class="action-btn end" @onclick="EndCall">
+                    End
+                </button>
+            </div>
+
+            <div class="call-log">
+                <small>Recent Activity</small>
+                <ul>
+                    @foreach (var log in _recentCalls)
+                    {
+                        <li>@log</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _currentNumber = "";
+    private string[] _keys = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#" };
+    private List<string> _recentCalls = new();
+
+    private void AppendDigit(string digit)
+    {
+        if (_currentNumber.Length < 16)
+        {
+            _currentNumber += digit;
+            // Blazor automatically triggers a re-render here
+        }
+    }
+
+    private void Backspace()
+    {
+        if (_currentNumber.Length > 0)
+            _currentNumber = _currentNumber[..^1];
+    }
+
+    private void ClearAll() => _currentNumber = "";
+
+    private void StartCall()
+    {
+        if (!string.IsNullOrEmpty(_currentNumber))
+        {
+            _recentCalls.Insert(0, $"Dialed: {_currentNumber} at {DateTime.Now:T}");
+            if (_recentCalls.Count > 3) _recentCalls.RemoveAt(3);
+        }
+    }
+
+    private void EndCall()
+    {
+        _currentNumber = "";
+    }
+}

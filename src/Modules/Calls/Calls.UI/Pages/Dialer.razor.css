@@ -1,0 +1,126 @@
+﻿.dialer-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dialer-horizontal {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+/* Keypad Styling */
+.keypad-section {
+    flex: 1;
+    background: #fcfcfc;
+    padding: 30px;
+    border-right: 1px solid #eee;
+}
+
+.keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.dial-btn {
+    height: 70px;
+    font-size: 1.5rem;
+    border: 1px solid #eee;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+    .dial-btn:hover {
+        background: #f0f0f0;
+    }
+
+    .dial-btn:active {
+        transform: translateY(2px);
+        background: #e0e0e0;
+    }
+
+.util {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+/* Display Styling */
+.display-section {
+    flex: 1.5;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.screen-box {
+    background: #1a1a1a;
+    color: #00ff41; /* "Matrix" green for contrast */
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+    .screen-box label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        opacity: 0.7;
+    }
+
+.number-display {
+    font-size: 2.5rem;
+    font-family: monospace;
+    letter-spacing: 3px;
+}
+
+.action-row {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.call {
+    background: #28a745;
+    color: white;
+}
+
+    .call:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.end {
+    background: #dc3545;
+    color: white;
+}
+
+.call-log {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+    .call-log ul {
+        list-style: none;
+        padding: 0;
+        font-size: 0.9rem;
+        color: #777;
+    }

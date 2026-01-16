@@ -1,7 +1,90 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Home - Phonebook App</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="display-4">Welcome to Phonebook App</h1>
+            <p class="lead text-muted">Manage your contacts and calls efficiently</p>
+        </div>
+    </div>
 
-Welcome to your new app.
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-primary h-100">
+                <div class="card-body text-center p-5">
+                    <i class="bi bi-people-fill text-primary" style="font-size: 4rem;"></i>
+                    <h3 class="card-title mt-3">
+                        Contacts <sup class="text-uppercase" style="font-size: 0.4em;">MicroFrontEnd Moule</sup>
+                    </h3>
+                    <p class="card-text text-muted">
+                        Organize and manage all your contacts in one place.
+                        Add personal and professional details, create groups, and mark favorites.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="/contacts" class="btn btn-primary">
+                            <i class="bi bi-people"></i> View Contacts
+                        </a>
+                        <a href="/contacts/create" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus"></i> Add New Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-success h-100">
+                <div class="card-body text-center p-5">
+                    <i class="bi bi-telephone-fill text-success" style="font-size: 4rem;"></i>
+                    <h3 class="card-title mt-3">
+                        Calls <sup class="text-uppercase" style="font-size: 0.4em;">MicroFrontEnd Moule</sup>
+                    </h3>
+                    <p class="card-text text-muted">
+                        Track your call history, make new calls, and manage your communication.
+                        View call duration, status, and contact information.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="callshistory" class="btn btn-success">
+                            <i class="bi bi-clock-history"></i> Call History
+                        </a>
+                        <a href="dialer" class="btn btn-outline-success">
+                            <i class="bi bi-grid-3x3-gap"></i> Open Dialer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-info-circle"></i> Features
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Create and manage contacts</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Organize contacts into groups</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Mark favorite contacts</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Search and filter contacts</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Make voice calls</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Track call history</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> View call duration and status</li>
+                                <li><i class="bi bi-check-circle-fill text-success"></i> Quick dialer interface</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

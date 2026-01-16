@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Calls\Calls.UI\Calls.UI.csproj" />
     <ProjectReference Include="..\..\Modules\Contacts\Contacts.Application\Contacts.Application.csproj" />
     <ProjectReference Include="..\..\Modules\Contacts\Contacts.UI\Contacts.UI.csproj" />
     <ProjectReference Include="..\PhoneBookBlazorApp.Client\PhoneBookBlazorApp.Client.csproj" />

@@ -1,0 +1,108 @@
+﻿@page "/callsHistory"
+@using System.ComponentModel.DataAnnotations
+@attribute [StreamRendering]
+
+<PageTitle>Calls History</PageTitle>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="bi bi-telephone-outbound me-2"></i>Calls History</h3>
+        
+    </div>
+
+    @if (calls == null)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Retrieving call logs...</p>
+        </div>
+    }
+    else if (!calls.Any())
+    {
+        <div class="alert alert-info">No recent calls found.</div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Contact / Number</th>
+                        <th>Type</th>
+                        <th>Date & Time</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var call in calls)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-bold">@call.ContactName</div>
+                                <small class="text-muted">@call.PhoneNumber</small>
+                            </td>
+                            <td>
+                                @if (call.Direction == "Incoming")
+                                {
+                                    <span class="badge bg-info text-dark"><i class="bi bi-box-arrow-in-down-left"></i> Incoming</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary"><i class="bi bi-box-arrow-up-right"></i> Outgoing</span>
+                                }
+                            </td>
+                            <td>@call.Timestamp.ToString("MMM dd, yyyy HH:mm")</td>
+                            <td>@call.Duration</td>
+                            <td>
+                                <span class="badge @(call.Status == "Missed" ? "bg-danger" : "bg-success")">
+                                    @call.Status
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<CallLog>? calls;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate an API call delay
+        await Task.Delay(800);
+        LoadMockData();
+    }
+
+    private void RefreshHistory()
+    {
+        calls = null;
+        LoadMockData();
+    }
+
+    private void LoadMockData()
+    {
+        calls = new List<CallLog>
+        {
+            new CallLog { ContactName = "Alice Johnson", PhoneNumber = "+1 (555) 012-3456", Direction = "Incoming", Timestamp = DateTime.Now.AddHours(-2), Duration = "12m 4s", Status = "Completed" },
+            new CallLog { ContactName = "Unknown", PhoneNumber = "+1 (555) 987-6543", Direction = "Incoming", Timestamp = DateTime.Now.AddHours(-5), Duration = "0s", Status = "Missed" },
+            new CallLog { ContactName = "Tech Support", PhoneNumber = "800-555-0199", Direction = "Outgoing", Timestamp = DateTime.Now.AddDays(-1), Duration = "45m 12s", Status = "Completed" },
+            new CallLog { ContactName = "Bob Smith", PhoneNumber = "+1 (555) 234-5678", Direction = "Outgoing", Timestamp = DateTime.Now.AddDays(-1).AddHours(3), Duration = "2m 15s", Status = "Completed" }
+        };
+    }
+
+    public class CallLog
+    {
+        public string ContactName { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
+        public string Direction { get; set; } = ""; // Incoming/Outgoing
+        public DateTime Timestamp { get; set; }
+        public string Duration { get; set; } = "";
+        public string Status { get; set; } = ""; // Completed/Missed/Rejected
+    }
+}
