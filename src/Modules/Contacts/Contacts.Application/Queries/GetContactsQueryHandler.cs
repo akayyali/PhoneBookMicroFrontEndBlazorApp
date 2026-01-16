@@ -1,18 +1,22 @@
-﻿using Contacts.Contracts.DTOs;
+﻿using Contacts.Application.Commands;
+using Contacts.Contracts.DTOs;
 using Contacts.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PhoneBook.Kernel.Data.Specification;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PhoneBook.Kernel.Data.Specification;
 
 namespace Contacts.Application.Queries
 {
-    public class GetContactsQueryHandler(ContactsDbContext _contactsDBContext) : IRequestHandler<GetContactsQuery, IEnumerable<ContactDto>>
+    public class GetContactsQueryHandler(ContactsDbContext _contactsDBContext, ILogger<GetContactsQueryHandler> _logger) : IRequestHandler<GetContactsQuery, IEnumerable<ContactDto>>
     {
         public async Task<IEnumerable<ContactDto>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
         {
+
+            _logger.LogDebug("Handling GetContactsQuery with specification: {@Specification}", request.specification);
 
             var contacts = _contactsDBContext.Contacts.AsQueryable().ApplySpecification(request.specification)
                 .Select(x => new ContactDto()

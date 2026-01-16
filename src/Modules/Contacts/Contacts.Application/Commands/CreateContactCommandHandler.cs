@@ -4,6 +4,7 @@ using Contacts.Domain.Entities;
 using Contacts.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -11,10 +12,12 @@ using System.Text;
 
 namespace Contacts.Application.Commands
 {
-    public class CreateContactCommandHandler(ContactsDbContext _contactsDBContext) : IRequestHandler<CreateContactCommand, ContactDto>
+    public class CreateContactCommandHandler(ContactsDbContext _contactsDBContext, ILogger<CreateContactCommandHandler> _logger) : IRequestHandler<CreateContactCommand, ContactDto>
     {
         public async Task<ContactDto> Handle(CreateContactCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Handling CreateContactCommand for {FirstName} {LastName}", request.FirstName, request.LastName);
+
             var phoneNumber = new PhoneNumber(request.PhoneNumber, request.CountryCode);
 
             Email? email = null;
