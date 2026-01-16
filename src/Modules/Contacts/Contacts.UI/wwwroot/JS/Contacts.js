@@ -52,6 +52,12 @@ export function renderGroupChart(data) {
         .range([0, height])
         .padding(0.2);
 
+    // Color scale: deterministic per category name.
+    // If DTO includes a 'color' property (like "#ff0000"), it will be used.
+    const colorScale = d3.scaleOrdinal()
+        .domain(data.map(d => d.name))
+        .range(d3.schemeCategory10); // change to another scheme if you prefer
+
     // Bars
     svg.selectAll("rect")
         .data(data)
@@ -60,7 +66,7 @@ export function renderGroupChart(data) {
         .attr("x", 0)
         .attr("width", d => x(d.value))
         .attr("height", y.bandwidth())
-        .attr("fill", "#28a745") // Green theme
+        .attr("fill", d => d.color || colorScale(d.name)) // per-item color or scale by name
         .attr("rx", 4);
 
     // Labels
