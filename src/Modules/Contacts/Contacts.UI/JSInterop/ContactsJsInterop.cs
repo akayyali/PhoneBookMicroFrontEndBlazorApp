@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Contacts.Contracts.DTOs;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +29,13 @@ namespace Contacts.UI.JSInterop
             var module = await moduleTask.Value;
             return await module.InvokeAsync<bool>("ConfirmdeleteContact", message);
         }
+
+        public async ValueTask RenderGroupChartAsync(object contacts)
+        {
+            var module = await moduleTask.Value;
+            await module.InvokeVoidAsync("renderGroupChart", contacts);
+        }
+
 
 
 

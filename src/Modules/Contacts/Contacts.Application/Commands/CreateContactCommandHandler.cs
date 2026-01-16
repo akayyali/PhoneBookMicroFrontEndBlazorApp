@@ -16,8 +16,12 @@ namespace Contacts.Application.Commands
     {
         public async Task<ContactDto> Handle(CreateContactCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Handling CreateContactCommand for {FirstName} {LastName}", request.FirstName, request.LastName);
+            try
+            {
 
+            
+            _logger.LogDebug("Handling CreateContactCommand for {FirstName} {LastName}", request.FirstName, request.LastName);
+            
             var phoneNumber = new PhoneNumber(request.PhoneNumber, request.CountryCode);
 
             Email? email = null;
@@ -56,6 +60,12 @@ namespace Contacts.Application.Commands
                 .FirstOrDefaultAsync(c => c.Id == contact.Id, cancellationToken);
 
             return MapToDto(freshContact);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating contact {FirstName} {LastName}", request.FirstName, request.LastName);
+                throw;
+            }
         }
 
         private static ContactDto MapToDto(Contact contact) => new()

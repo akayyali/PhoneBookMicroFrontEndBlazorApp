@@ -1,33 +1,44 @@
-﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
-
-@page "/stats"
+﻿@page "/stats"
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Contacts.Application.Queries
+@using Contacts.Contracts.DTOs
+@using Contacts.Domain.Specifications
+@using Contacts.UI.JSInterop
+@using MediatR
+@using PhoneBook.Kernel.Data.Specification
 @rendermode InteractiveServer
 
-@using MediatR
-@using Microsoft.JSInterop
-@using PhoneBook.Kernel
-@using PhoneBook.Kernel.Data.Specification
-@using global::Contacts.Application.Commands
-@using global::Contacts.Application.Queries
-@using global::Contacts.Contracts.DTOs
-@using global::Contacts.Domain
-@using global::Contacts.Domain.Specifications
-@using global::Contacts.UI.JSInterop
-@inject IMediator Mediator
-@inject NavigationManager Navigation
-@inject IJSRuntime JS
 @inject ContactsJsInterop jsInterop
+@inject IMediator Mediator
 
 
 <PageTitle>Contacts Statistics</PageTitle>
 
 <div class="container-fluid py-4">
-
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Contacts Distribution by Group</h5>
+        </div>
+        <div class="card-body">
+            @if (isLoading)
+            {
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            }
+            else
+            {
+                <div id="chart-container" style="width: 100%; min-height: 300px;">
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 @code {
     private List<ContactDto>? contacts;
     private bool isLoading = true;
+    private bool shouldRenderChart = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,9 +48,32 @@
     private async Task LoadContacts()
     {
         isLoading = true;
-        var query = new GetContactsQuery(new GetContactsSpecification() { TrackingOptions = enumTrackingOptions.DoNotTrack });
+        var query = new GetContactsQuery(new GetContactsSpecification()
+        {
+            TrackingOptions = enumTrackingOptions.DoNotTrack
+        });
         contacts = (await Mediator.Send(query)).ToList();
         isLoading = false;
+        shouldRenderChart = true;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (shouldRenderChart && !isLoading && contacts != null)
+        {
+            // PREPARE DATA HERE: Group by GroupName and count
+            var groupedData = contacts
+                .GroupBy(c => c.ContactGroup?.Name ?? "Unassigned")
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    Value = g.Count()
+                })
+                .OrderByDescending(x => x.Value)
+                .ToList();
+
+            shouldRenderChart = false; // Prevent infinite loop
+            await jsInterop.RenderGroupChartAsync(groupedData);
+        }
+    }
 }
