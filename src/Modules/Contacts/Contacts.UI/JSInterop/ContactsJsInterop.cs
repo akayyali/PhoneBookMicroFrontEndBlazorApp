@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Contacts.UI.JSInterop
 {
-    public class ExampleJsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
+    public class ContactsJsInterop(IJSRuntime jsRuntime) : IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-                  "import", "./_content/Contacts.UI/JS/Example.js").AsTask());
+                  "import", "./_content/Contacts.UI/JS/Contacts.js").AsTask());
 
         public async ValueTask<string> Prompt(string message)
         {

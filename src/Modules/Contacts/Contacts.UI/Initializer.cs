@@ -16,7 +16,7 @@ namespace Contacts.UI
 
         public static IServiceCollection AddContactsUIServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ExampleJsInterop>();
+            services.AddScoped<ContactsJsInterop>();
 
             return services;
 
