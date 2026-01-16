@@ -1,13 +1,18 @@
 ﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
-@page "/contacts/create"
+@page "/contacts/edit/{contactId:guid}"
 @rendermode InteractiveServer
+
 
 @using MediatR
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
+@using PhoneBook.Kernel
+@using PhoneBook.Kernel.Data.Specification
 @using global::Contacts.Application.Commands
 @using global::Contacts.Application.Queries
 @using global::Contacts.Contracts.DTOs
+@using global::Contacts.Domain
+@using global::Contacts.Domain.Specifications
 @using global::Contacts.UI.JSInterop
 @using global::Contacts.UI.Models
 @inject IMediator Mediator
@@ -18,7 +23,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            
+
             @* Header Section *@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -33,7 +38,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4 p-md-5">
                     <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
-                        
+
                         <DataAnnotationsValidator />
                         @* Section 1: Basic Information *@
                         <div class="mb-4">
@@ -133,17 +138,9 @@
                         @* Form Actions *@
                         <div class="d-flex justify-content-end gap-2 border-top pt-4">
                             <button class="btn btn-light px-4" type="button" @onclick="NavigateBack">Cancel</button>
-                            <button class="btn btn-primary px-5 shadow-sm" type="submit" disabled="@isSubmitting">
-                                @if (isSubmitting)
-                                {
-                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                                    <span>Saving...</span>
-                                }
-                                else
-                                {
-                                    <i class="bi bi-person-plus-fill me-2"></i>
-                                    <span>Create Contact</span>
-                                }
+                            <button class="btn btn-primary px-5 shadow-sm" disabled="@isSubmitting">
+                                <i class="bi bi-person-plus-fill me-2"></i>
+                                <span>Update Contact</span>
                             </button>
                         </div>
                     </EditForm>
@@ -155,16 +152,48 @@
 
 @code {
     // Logic remains identical to your original code
-    private CreateContactModel model = new();
+    [Parameter]
+    public Guid contactId { get; set; }
+
+    private EditContactModel model = new();
     private bool isSubmitting = false;
     private List<ContactGroupDto> contactGroups = new();
 
-    protected override async Task OnInitializedAsync() => await LoadContactGroups();
-
-    private async Task LoadContactGroups()
+    protected override async Task OnInitializedAsync() => await LoadData();
+    private bool isLoading = true;
+    private async Task LoadData()
     {
         try
         {
+            ContactDto? contact;
+
+
+            //we need the specification pattern to query specific contact
+            isLoading = true;
+            var query = new GetContactsQuery(new GetContactsSpecification(contactId) { TrackingOptions = enumTrackingOptions.DoNotTrack });
+            contact = (await Mediator.Send(query)).ToList().FirstOrDefault();
+            if (contact != null)
+            {
+                model.FirstName = contact.FirstName;
+                model.LastName = contact.LastName;
+                model.PhoneNumber = contact.PhoneNumber;
+                model.CountryCode = contact.CountryCode;
+                model.Email = contact.Email;
+                model.Street = contact.Address?.Street ?? "";
+                model.City = contact.Address?.Suburb ?? "";
+                model.State = contact.Address?.State ?? "";
+                model.PostalCode = contact.Address?.PostCode ?? "";
+                model.Country = contact.Address?.Country ?? "";
+                model.Company = contact.Company;
+                model.JobTitle = contact.JobTitle;
+                model.Notes = contact.Notes;
+                model.ContactGroupIdString = contact.ContactGroupId?.ToString() ?? "";
+
+            }
+
+            isLoading = false;
+
+
             var groups = await Mediator.Send(new GetAllContactGroupsQuery());
             contactGroups = groups?.ToList() ?? new List<ContactGroupDto>();
         }
@@ -176,19 +205,8 @@
         isSubmitting = true;
         try
         {
-            Guid? groupId = Guid.TryParse(model.ContactGroupIdString, out var parsed) ? parsed : null;
-            var command = new CreateContactCommand(
-                model.FirstName, model.LastName, model.PhoneNumber, model.CountryCode,
-                model.Email, model.Street, model.City, model.State, model.PostalCode,
-                model.Country, model.Company, model.JobTitle, model.Notes, groupId);
-
-            var coontactDto = await Mediator.Send(command);
-            if (coontactDto!= null)
-            {
-                await jsInterop.AlertUser("Contact created successfully.");
-                Navigation.NavigateTo("/contacts");
-            }
-            
+            await jsInterop.AlertUser("Update function is not implemented yet.");
+            Navigation.NavigateTo("/contacts");
         }
         catch (Exception ex)
         {
@@ -197,7 +215,5 @@
         finally { isSubmitting = false; }
     }
 
-
     private void NavigateBack() => Navigation.NavigateTo("/contacts");
-
 }

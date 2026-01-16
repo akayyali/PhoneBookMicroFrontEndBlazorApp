@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Database/">
     <File Path="Database/PhonebookDb.sql" />
+    <File Path="Seed.sql" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />

@@ -5,20 +5,24 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using PhoneBook.Kernel.Data.Specification;
 
 namespace Contacts.Application.Queries
 {
-    public class GetAllContactsQueryHandler(ContactsDbContext _contactsDBContext) : IRequestHandler<GetAllContactsQuery, IEnumerable<ContactDto>>
+    public class GetContactsQueryHandler(ContactsDbContext _contactsDBContext) : IRequestHandler<GetContactsQuery, IEnumerable<ContactDto>>
     {
-        public async Task<IEnumerable<ContactDto>> Handle(GetAllContactsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ContactDto>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
         {
-            var contacts = _contactsDBContext.Contacts.Select(x => new ContactDto()
+
+            var contacts = _contactsDBContext.Contacts.AsQueryable().ApplySpecification(request.specification)
+                .Select(x => new ContactDto()
             {
                 Id = x.Id,
                 Company = x.Company,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 PhoneNumber = x.PhoneNumber.FormattedNumber,
+                CountryCode = x.PhoneNumber.CountryCode?? "",
                 JobTitle = x.JobTitle,
                 Notes = x.Notes,
                 ContactGroupId = x.ContactGroupId,
@@ -27,7 +31,7 @@ namespace Contacts.Application.Queries
                     Name = x.ContactGroup.Name,
                     Description = x.ContactGroup.Description
                 } : null,
-                Email = x.Email!= null? x.Email.Address : string.Empty,
+                Email = x.Email != null ? x.Email.Address : string.Empty,
                 Address = x.Address != null ? new AddressDto()
                 {
                     Street = x.Address.Street,
@@ -36,7 +40,8 @@ namespace Contacts.Application.Queries
                     PostCode = x.Address.PostCode,
                     Country = x.Address.Country
                 } : null,
-            }).AsNoTracking();
+            });
+                //.AsNoTracking();
 
             return await contacts.ToListAsync();
         }
