@@ -1,0 +1,79 @@
+﻿@using Contacts.Application.Commands
+@using Contacts.Contracts.DTOs
+@using Contacts.UI.JSInterop
+@using MediatR
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@inject ExampleJsInterop jsInterop
+
+<div class="col-md-6 col-lg-4 mb-3">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">
+                    @contact.FullName
+                    @if (contact.IsFavorite)
+                    {
+                        <i class="bi bi-star-fill text-warning"></i>
+                    }
+                </h5>
+            </div>
+            <p class="card-text">
+                <i class="bi bi-telephone"></i> @contact.PhoneNumber<br />
+                @if (!string.IsNullOrEmpty(contact.Email))
+                {
+                    <span><i class="bi bi-envelope"></i> @contact.Email<br /></span>
+                }
+                @if (!string.IsNullOrEmpty(contact.Company))
+                {
+                    <span><i class="bi bi-building"></i> @contact.Company<br /></span>
+                }
+            </p>
+            <div class="btn-group" role="group">
+                <button class="btn btn-sm btn-outline-secondary disabled" disabled @onclick="() => ViewDetails(contact.Id)">View</button>
+                <button class="btn btn-sm btn-outline-primary" @onclick="() => EditContact(contact.Id)">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteContactAsync(contact.Id, contact.FullName)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public ContactDto contact { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnContactDelete { get; set; }
+
+    private async Task NotifyParentOfContactDeletion(Guid deletedContactId)
+    {
+        await OnContactDelete.InvokeAsync(deletedContactId);
+    }
+
+    private async Task ViewDetails(Guid id)
+    {
+         //await jsInterop.AlertUser("View detail function is not implemented yet.");
+    }
+
+    private void EditContact(Guid id) => Navigation.NavigateTo($"/contacts/edit/{id}");
+
+    public async Task DeleteContactAsync(Guid id, string contactName)
+    {
+        var result = await jsInterop.ConfirmDeleteContact($"Are you sure you want to delete Contact : '{contactName}' ?");
+        if (result)
+        {
+            var command = new DeleteContactCommand(id);
+            await Mediator.Send(command);
+            await NotifyParentOfContactDeletion(id);   
+        }
+        else
+        {
+            // User cancelled the deletion
+        }
+
+    }
+}

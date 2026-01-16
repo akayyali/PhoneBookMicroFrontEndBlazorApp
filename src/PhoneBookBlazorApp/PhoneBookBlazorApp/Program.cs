@@ -36,6 +36,6 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(PhoneBookBlazorApp.Client._Imports).Assembly, typeof(Contacts.UI.Pages.Contacts).Assembly);
+    .AddAdditionalAssemblies(typeof(PhoneBookBlazorApp.Client._Imports).Assembly, typeof(Contacts.UI.Pages.ContactsList).Assembly);
 
 app.Run();
