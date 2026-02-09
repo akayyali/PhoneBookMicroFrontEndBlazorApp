@@ -1,4 +1,4 @@
-# PhoneBookBlazorApp
+# PhoneBookBlazorApp (A MicroFrontEnd Blazor App)
 
 ## Navigate to "\PhoneBookBlazorApp\src>" folder in order to run the migration commands:
 
